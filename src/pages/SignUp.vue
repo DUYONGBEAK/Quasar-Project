@@ -42,7 +42,7 @@
       
       </div>
      <div>
-       <q-btn type="submit" outline color="primary" label="Create Account" @click="persistent = true"/>
+       <q-btn type="submit" outline color="primary" label="Create Account" @click="signUp"/>
        <q-btn type="reset" outline color="green" label="Reset" flat class="q-ml-sm" />
        <p>Already have an account?<a href='/'> Sign in</a></p>
 
@@ -104,6 +104,7 @@ export default {
     const password = ref(null);
     const chkpw = ref(null);
     const displayName = ref(null);
+    const persistent = ref(false);
      return {
        name,
        age,
@@ -112,9 +113,9 @@ export default {
        chkpw,
        accept,
        displayName,
-       persistent: ref(false),
+       persistent,
        dialog: ref(false),
-      maximizedToggle: ref(true),    
+       maximizedToggle: ref(true),    
 
       onReset () {
         email.value = null
@@ -153,6 +154,19 @@ export default {
        
       }
     },
+    signUp(){
+      console.log('여기 들어옴?');
+      if(email.value !== null && password.value !== null && chkpw.value !== null &&
+        displayName.value !== null && age.value !== null && accept.value !== false){
+        console.log('22222222222');
+        persistent.value = true;
+        console.log(persistent);
+      }else{
+        console.log('33333333');
+        persistent.value = true;
+        console.log(persistent);
+      }
+    },
     }
   },
   data(){
@@ -185,7 +199,7 @@ export default {
     moveMain(){
       location.href='/';
     },
-    
+   
   }
 }
 </script>

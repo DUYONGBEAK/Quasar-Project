@@ -22,6 +22,7 @@ import { defineComponent } from 'vue';
 import { ref } from 'vue'
 import { auth } from 'src/boot/firebase'
 import { useQuasar } from 'quasar'
+import { useStore } from 'vuex';
 
 export default {
   name: 'PageIndex',
@@ -29,6 +30,7 @@ export default {
     const $q = useQuasar();
     const email = ref(null);
     const password = ref(null);
+    const $store = useStore();
     return{
       email,
       password,
@@ -38,6 +40,8 @@ export default {
       // Signed in
       var user = userCredential.user;
       console.log("success",user);
+      $store.commit("setFireUser",user);
+     
       // ...
       $q.notify({
               position:"top",
@@ -50,6 +54,11 @@ export default {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorMessage);
+         $q.notify({
+              position:"top",
+              message : "login failure",
+              color : "red"
+            })
       });
       }
     };
@@ -72,7 +81,8 @@ export default {
     },
     moveFindPw(){
        location.href='/#/findPw';
-    }
+    },
+ 
   }
 }
 </script>
