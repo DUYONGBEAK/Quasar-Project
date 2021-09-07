@@ -1,5 +1,5 @@
 {
-  "name": "myapp",
+  "name": "myappa",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
   "productName": "Quasar App",
@@ -12,9 +12,9 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
-    "firebase": "^8.10.0",
+    "firebase": "^8.7.1",
     "quasar": "^2.0.0",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",

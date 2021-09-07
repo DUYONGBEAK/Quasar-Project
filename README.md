@@ -1,4 +1,4 @@
-# Quasar App (myapp)
+# Quasar App (myappa)
 
 A Quasar Framework app
 

@@ -4,7 +4,7 @@
         안녕하세요 {{userName}} 님
         <p>{{userEmail}}</p>
           <div>
-          <q-btn @click="logout()" outline color="secondary" label="logout" />
+          <q-btn @click.prevent="logout" outline color="secondary" label="logout" />
           </div>
       </div>
   </q-page>
@@ -12,32 +12,88 @@
 
 <script>
 import { ref } from 'vue'
-import { auth } from 'src/boot/firebase'
-import {useStore} from 'vuex'
-import {mapActions,mapGetters} from 'vuex'
+import { auth, db } from 'src/boot/firebase'
+import { useQuasar } from 'quasar'
+import { useRouter, useRoute } from 'vue-router'
+import {useStore, mapActions, mapGetters } from 'vuex'
 export default {
   
   setup(){
+    const $q = useQuasar();
     var userName=ref('');
     var userEmail=ref('');
+    const $router = useRouter()
+    const $route = useRoute()
+
       auth.onAuthStateChanged((user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         console.log(user);
-        userName.value = user.displayName;
-        userEmail.value=user.email;
+        // userName.value = user.displayName;
+        userEmail.value = user.email;
         
         // ...
       } else {
         // User is signed out
         // ...
       }
-    });
-    console.log(userName);
+    })
+    let logout = () => {
+       auth.signOut().then(() => {
+        // Sign-out successful.
+        console.log("logout success");
+        //location.href='/#/';
+        $router.push({ path: '/'}) 
+      }).catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+    }
     return{
+      logout,
       userName,
       userEmail
+    }
+  },
+  updated(){
+    this.authAction()
+    console.log("updated called");
+    if(this.getFireUser != null && this.userName == ''){
+         db.collection("users").where("id", "==", this.getFireUser.email)
+      .get()
+      .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              this.userName = doc.data().name
+          });
+      })
+      .catch((error) => {
+          console.log("Error getting documents: ", error);
+      });
+
+    }
+    
+  },
+  mounted() {
+      this.authAction()
+      console.log("monted called");
+      console.log(this.getFireUser);    
+
+    if(this.getFireUser != null){
+      db.collection("users").where("id", "==", this.getFireUser.email)
+      .get()
+      .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              this.userName = doc.data().name
+          });
+      })
+      .catch((error) => {
+          console.log("Error getting documents: ", error);
+      });
     }
   },
   computed:{
@@ -45,23 +101,6 @@ export default {
   },
   methods:{
     ...mapActions(["signOutAction","authAction"]),
-    
-    logout(){
-      auth.signOut().then(() => {
-        // Sign-out successful.
-        console.log("logout success");
-        location.href='/#/';
-      }).catch((error) => {
-        // An error happened.
-        console.log(error);
-      });
-       
-    }
-  },
-  data(){
-    return{
-      
-    }
   },
 }
 </script>

@@ -18,37 +18,49 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { ref } from 'vue'
-import { auth } from 'src/boot/firebase'
-import { useQuasar } from 'quasar'
-import { useStore } from 'vuex';
+  import {defineComponent, ref} from 'vue'
+  import { auth } from 'src/boot/firebase'
+  import { useQuasar } from 'quasar'
+  import { useRouter, useRoute } from 'vue-router'
+  import {useStore, mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'PageIndex',
+  name: 'loginUser',
   setup(){
     const $q = useQuasar();
-    const email = ref(null);
-    const password = ref(null);
     const $store = useStore();
+    const $router = useRouter()
+    const $route = useRoute()
+
+    let email = ref('')
+    let password = ref('')
+    let isPwd = ref('true')
+    let remember = ref('false')
+    let validationErrors = ref('')
+    let userName = ref('')
+    
     return{
       email,
       password,
+      isPwd,
+      remember,
+      validationErrors,
+      userName,
       onSubmit(){
       auth.signInWithEmailAndPassword(email.value, password.value)
       .then((userCredential) => {
       // Signed in
       var user = userCredential.user;
       console.log("success",user);
-      $store.commit("setFireUser",user);
-     
+      
+      $store.commit("setFireUser", user)
       // ...
       $q.notify({
               position:"top",
               message : "login success",
               color : "blue"
             })
-      location.href='/#/main';     
+      $router.push({ path: '/main'})     
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -68,6 +80,11 @@ export default {
       message:"",
       modal : false,
     };
+  },
+  computed: {
+  ...mapGetters(["getFireUser", "isUserAuth"])
+  // signOutActions() {} 라는애가 있는데, vuex.signOutAction(){}랑 똑같으니
+  // 맵핑해줘!(예시임)
   },
   methods:{
     modalOpen(){

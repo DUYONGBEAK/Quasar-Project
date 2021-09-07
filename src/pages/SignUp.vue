@@ -90,7 +90,7 @@
 import { defineComponent } from 'vue';
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { auth } from 'src/boot/firebase'
+import { auth, db } from 'src/boot/firebase'
 
 export default {
   name: 'PageIndex',
@@ -138,7 +138,18 @@ export default {
           displayName : name.value
         })
         console.log("success",user);
-        
+        // Add a new document with a generated id.
+        db.collection("users").add({
+            id: email.value,
+            name: name.value,
+            age: age.value
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
         
         // ...
       })
@@ -146,6 +157,11 @@ export default {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorMessage);
+        $q.notify({
+                    position : "center",
+                    message : errorMessage,
+                    color : "grey"
+                        })
         
         // ..
       });
@@ -160,11 +176,11 @@ export default {
         displayName.value !== null && age.value !== null && accept.value !== false){
         console.log('22222222222');
         persistent.value = true;
-        console.log(persistent);
+
       }else{
         console.log('33333333');
         persistent.value = true;
-        console.log(persistent);
+
       }
     },
     }
@@ -197,7 +213,7 @@ export default {
   },
   methods:{
     moveMain(){
-      location.href='/';
+       location.href='/';
     },
    
   }

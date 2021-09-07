@@ -1,19 +1,20 @@
 import firebase from 'firebase/app';
 import 'firebase/auth'
-
+import 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCkH8WyEZlmJM3SPwPCkn4CQw7hpRzFk20",
-  authDomain: "myapp-68b11.firebaseapp.com",
-  projectId: "myapp-68b11",
-  storageBucket: "myapp-68b11.appspot.com",
-  messagingSenderId: "645568769732",
-  appId: "1:645568769732:web:49d4b58a7418c9b4cea391"
-  };
+    apiKey: "AIzaSyAJQcIBB-CeHxXuNRB56oDriEehd8aB-nY",
+    authDomain: "myapp-2ece6.firebaseapp.com",
+    projectId: "myapp-2ece6",
+    storageBucket: "myapp-2ece6.appspot.com",
+    messagingSenderId: "457556180809",
+    appId: "1:457556180809:web:9362afcbc8fcfebaf1a498",
+    measurementId: "G-KS7R16EJQ8"
+    };
 
-
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig)
-}
+    if(!firebase.apps.length){
+        firebase.initializeApp(firebaseConfig)
+      }    
 
 export const auth = firebase.auth();
+export const db = firebase.firestore();

@@ -1,6 +1,6 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-import { auth } from 'src/boot/firebase';
+import { auth } from 'src/boot/firebase'
 // import example from './module-example'
 
 /*
@@ -17,36 +17,37 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       // example
     },
-    state:{
+    state : {
       fireUser:null
     },
-    action:{
-      signOutAction({commit}){
-        auth.signOut().then(()=>{
-          commit("setFireUser",null)
+    actions: {
+      signOutAction({commit}) {
+        auth.signOut().then(() => {
+          commit("setFireUser", null) //동기function 바로 반응함
         })
       },
-      authAction({commit}){
-        auth.onAuthStateChanged(user => {
-          if(user){
-            commit("setFireUser",user)
-          }
-        })
-      }
+        authAction({commit}) {
+          auth.onAuthStateChanged(user => {
+            if(user) {
+              commit("setFireUser", user)
+            }
+          })
+        }
     },
-    mutations:{
-      setFireUser(state,firebaseUser){
+    mutations: { //세터
+      setFireUser(state, firebaseUser) {
         state.fireUser = firebaseUser
       }
     },
-    gettters:{
-      getFireUser(state){
+    getters: {
+      getFireUser(state) {
         return state.fireUser
       },
-      isUserAuth(state){
+      isUserAuth (state) {
         return !!state.fireUser
       }
     },
+
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
     strict: process.env.DEBUGGING
