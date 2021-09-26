@@ -5,6 +5,7 @@
         <p>{{userEmail}}</p>
           <div>
           <q-btn @click.prevent="logout" outline color="secondary" label="logout" />
+           <q-btn @click="myinfo()" outline color="secondary"  label="mypage"/>
           </div>
       </div>
   </q-page>
@@ -101,6 +102,9 @@ export default {
   },
   methods:{
     ...mapActions(["signOutAction","authAction"]),
+     myinfo(){
+      location.href='/#/myinfo';
+    },
   },
 }
 </script>
